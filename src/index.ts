@@ -2,9 +2,15 @@ import './settings'
 import { Request, Response } from 'express'
 import express from 'express'
 import servers from './servers'
+import bodyParser from 'body-parser'
 
 // basic setup
 const app = express()
+
+// body-parser setup
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 
 // logging
 if (process.env.BASEURL == 'http://localhost:') {
