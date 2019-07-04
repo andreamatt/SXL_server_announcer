@@ -1,0 +1,35 @@
+{
+  "name": "sxl_server_announcer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./built/index.js",
+  "scripts": {
+    "run": "tsc && node ./built/index.js",
+    "start": "tsc && node ./built/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreamatt/SXL_server_announcer.git"
+  },
+  "author": "andreamatt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreamatt/SXL_server_announcer/issues"
+  },
+  "homepage": "https://github.com/andreamatt/SXL_server_announcer#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "typescript": "^3.5.2"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/express": "^4.17.0",
+    "@types/node": "^12.0.12",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "eslint": "^6.0.1"
+  }
+}
