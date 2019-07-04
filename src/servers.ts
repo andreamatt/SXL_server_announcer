@@ -6,14 +6,14 @@ class Server {
     name: string
     n_players: number
     map: string
-    last_seen: number
+    last_seen: Date
 
     constructor(ip: string, name: string, n_players: number, map: string) {
         this.ip = ip
         this.name = name
         this.n_players = n_players
         this.map = map
-        this.last_seen = Date.now()
+        this.last_seen = new Date()
     }
 }
 
@@ -24,7 +24,7 @@ const servers: Map<string, Server> = new Map<string, Server>()
 function delete_dead(): void {
     Array.from(servers.values())
         .filter(s => {
-            return Date.now() - s.last_seen > 1000 * 20 // older than 20 seconds
+            return Date.now() - s.last_seen.getTime() > 1000 * 20 // older than 20 seconds
         })
         .forEach(s => servers.delete(s.ip))
 }
