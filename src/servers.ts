@@ -37,14 +37,15 @@ function servers_GET(req: Request): MyResponse {
 }
 
 function servers_POST(req: Request): MyResponse {
-    let { ip, name, n_players, map, version } = req.body
+    let { name, n_players, map, version } = req.body
     n_players = toInt(n_players)
-    if (!isString(ip)) return new MyResponse(400, "Bad id")
     if (!isString(name)) return new MyResponse(400, "Bad name")
     if (!isInteger(n_players)) return new MyResponse(400, "Bad n_players")
     if (!isString(map)) return new MyResponse(400, "Bad map")
     if (!isString(version)) return new MyResponse(400, "Bad version")
 
+    let ip = req.header('x-forwarded-for') || req.connection.remoteAddress
+    if (!ip) return new MyResponse(505, "Unable to resolve remote IP address")
     servers.set(ip, new Server(ip, name, n_players, map, version))
 
     return new MyResponse(200, "Ok")
