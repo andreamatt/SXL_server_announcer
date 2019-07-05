@@ -7,13 +7,15 @@ class Server {
     n_players: number
     map: string
     last_seen: Date
+    version: string
 
-    constructor(ip: string, name: string, n_players: number, map: string) {
+    constructor(ip: string, name: string, n_players: number, map: string, version: string) {
         this.ip = ip
         this.name = name
         this.n_players = n_players
         this.map = map
         this.last_seen = new Date()
+        this.version = version
     }
 }
 
@@ -35,10 +37,10 @@ function servers_GET(req: Request): MyResponse {
 }
 
 function servers_POST(req: Request): MyResponse {
-    let { ip, name, n_players, map } = req.body
-    if (!isString(ip) || !isString(name) || !isInteger(n_players) || !isString(map)) return new MyResponse(400, "bad request")
+    let { ip, name, n_players, map, version } = req.body
+    if (!isString(ip) || !isString(name) || !isInteger(n_players) || !isString(map) || !isString(version)) return new MyResponse(400, "bad request")
 
-    servers.set(ip, new Server(ip, name, n_players, map))
+    servers.set(ip, new Server(ip, name, n_players, map, version))
 
     return new MyResponse(200, "Ok")
 }
