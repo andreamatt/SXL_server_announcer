@@ -38,7 +38,12 @@ function servers_GET(req: Request): MyResponse {
 
 function servers_POST(req: Request): MyResponse {
     let { ip, name, n_players, map, version } = req.body
-    if (!isString(ip) || !isString(name) || !isInteger(n_players) || !isString(map) || !isString(version)) return new MyResponse(400, "bad request")
+    n_players = toInt(n_players)
+    if (!isString(ip)) return new MyResponse(400, "Bad id")
+    if (!isString(name)) return new MyResponse(400, "Bad name")
+    if (!isInteger(n_players)) return new MyResponse(400, "Bad n_players")
+    if (!isString(map)) return new MyResponse(400, "Bad map")
+    if (!isString(version)) return new MyResponse(400, "Bad version")
 
     servers.set(ip, new Server(ip, name, n_players, map, version))
 

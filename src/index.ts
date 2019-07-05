@@ -17,6 +17,7 @@ if (process.env.BASEURL == 'http://localhost:') {
     app.use((req: Request, res: Response, next) => {
         console.log(`Params: ${JSON.stringify(req.params)}`)
         console.log(`Query: ${JSON.stringify(req.query)}`)
+        console.log(`Body: ${JSON.stringify(req.body)}`)
         next()
     })
 }
