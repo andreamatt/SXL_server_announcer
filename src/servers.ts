@@ -2,20 +2,20 @@ import { Router, Request, Response } from 'express'
 import { MyResponse, isString, toInt, isInteger } from './utility'
 
 class Server {
-    ip: string
-    name: string
-    n_players: number
-    map: string
+    data: object
     last_seen: Date
-    version: string
+    ip: string
+    port: number
 
-    constructor(ip: string, name: string, n_players: number, map: string, version: string) {
-        this.ip = ip
-        this.name = name
-        this.n_players = n_players
-        this.map = map
+    constructor(ip: string, port: number, data: object) {
+        this.data = data
         this.last_seen = new Date()
-        this.version = version
+        this.ip = ip
+        this.port = port
+    }
+
+    get key(): string{
+        return this.ip + this.port
     }
 }
 
@@ -28,7 +28,7 @@ function delete_dead(): void {
         .filter(s => {
             return Date.now() - s.last_seen.getTime() > 1000 * 20 // older than 20 seconds
         })
-        .forEach(s => servers.delete(s.ip))
+        .forEach(s => servers.delete(s.key))
 }
 
 function servers_GET(req: Request): MyResponse {
@@ -37,16 +37,16 @@ function servers_GET(req: Request): MyResponse {
 }
 
 function servers_POST(req: Request): MyResponse {
-    let { name, n_players, map, version } = req.body
-    n_players = toInt(n_players)
-    if (!isString(name)) return new MyResponse(400, "Bad name")
-    if (!isInteger(n_players)) return new MyResponse(400, "Bad n_players")
-    if (!isString(map)) return new MyResponse(400, "Bad map")
-    if (!isString(version)) return new MyResponse(400, "Bad version")
+    let data = req.body.data
 
     let ip = req.header('x-forwarded-for') || req.connection.remoteAddress
     if (!ip) return new MyResponse(505, "Unable to resolve remote IP address")
-    servers.set(ip, new Server(ip, name, n_players, map, version))
+
+    let port = req.body.port
+    if(!port) return new MyResponse(506, "Unable to resolve remote port")
+
+    let server = new Server(ip, port, data)
+    servers.set(server.key, server)
 
     return new MyResponse(200, "Ok")
 }
